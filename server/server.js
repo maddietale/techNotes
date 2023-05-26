@@ -3,13 +3,18 @@ import express from "express";
 import path from "path";
 import * as url from "url";
 import dotenv from "dotenv";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import rootRoutes from "./routes/root.js";
 import logger from "./middleware/logger.js";
 import errorHandler from "./middleware/errorHandler.js";
+import corsOptions from "./config/corsOptions.js";
 // CONFIGURATION
 const app = express();
 app.use(express.json());
 dotenv.config();
+app.use(cors(corsOptions));
+app.use(cookieParser());
 const PORT = process.env.PORT || 3001;
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
