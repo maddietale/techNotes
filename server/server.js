@@ -6,9 +6,11 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import rootRoutes from "./routes/root.js";
-import logger from "./middleware/logger.js";
+import logger, { logEvents } from "./middleware/logger.js";
 import errorHandler from "./middleware/errorHandler.js";
 import corsOptions from "./config/corsOptions.js";
+import mongoose from "mongoose";
+import connectDB from "./config/connectDB.js";
 // CONFIGURATION
 const app = express();
 app.use(express.json());
@@ -20,6 +22,7 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // MW
+connectDB();
 app.use(logger);
 
 // FIND RESOURCES
@@ -44,4 +47,12 @@ app.all("*", (req, res) => {
 app.use(errorHandler);
 
 // RUN
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+mongoose.connection.once("open", () => {
+    console.log("Connected!");
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
+
+mongoose.connection.on("error", err => {
+    console.log(err);
+    logEvents(`${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`, 'mongoErrLog.log');
+});
