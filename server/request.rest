@@ -1,0 +1,12 @@
+GET http://localhost:3500/users
+
+###
+
+POST http://localhost:3500/users
+Content-Type: application/json
+
+{
+    "username": "mahdieh",
+    "password": "123",
+    "roles": ["Employee"]
+}

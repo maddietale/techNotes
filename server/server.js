@@ -5,11 +5,13 @@ import * as url from "url";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import mongoose from "mongoose";
 import rootRoutes from "./routes/root.js";
+import userRoutes from "./routes/userRoutes.js";
+import noteRoutes from "./routes/userRoutes.js";
 import logger, { logEvents } from "./middleware/logger.js";
 import errorHandler from "./middleware/errorHandler.js";
 import corsOptions from "./config/corsOptions.js";
-import mongoose from "mongoose";
 import connectDB from "./config/connectDB.js";
 // CONFIGURATION
 const app = express();
@@ -28,6 +30,9 @@ app.use(logger);
 // FIND RESOURCES
 app.use("/", express.static(path.join(__dirname, "public")));
 
+// API ROUTES
+app.use("/users", userRoutes);
+app.use("/notes", noteRoutes);
 // 3500 ROUTES
 app.use("/", rootRoutes);
 app.all("*", (req, res) => {
@@ -41,7 +46,7 @@ app.all("*", (req, res) => {
     else {
         res.type(".txt").send("404 Not Found");
     }
-})
+});
 
 // MW
 app.use(errorHandler);
