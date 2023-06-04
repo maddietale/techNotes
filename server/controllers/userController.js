@@ -1,7 +1,7 @@
 // IMPORTS
 import User from "../models/User.js";
 import Note from "../models/Note.js";
-import bcrypt, { genSalt } from "bcrypt";
+import bcrypt from "bcrypt";
 import asyncHandler from "express-async-handler";
 
 // @desc Get all users
@@ -53,7 +53,7 @@ const updateUser = asyncHandler(async (req, res) => {
     // GET DATA
     const { id, username, roles, active, password } = req.body;
     // CONFIRM DATA
-    if (!username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
+    if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
         return res.status(400).json({ message: "All fields are required, except password" });
     }
     // FIND DATA
@@ -75,13 +75,14 @@ const updateUser = asyncHandler(async (req, res) => {
     }
     // SEND DATA
     const updatedUser = await user.save()
-    res.status(200).json({ message: `${updatedUser.username} updated` })
+    res.status(200).json({ message: `${updatedUser.username} updated` });
 });
 
 // @desc Delete a user
 // @route DELETE /users
 // @access Private
 const deleteUser = asyncHandler(async (req, res) => {
+    // GET DATA
     const { id } = req.body;
     // CONFIRM DATA
     if (!id) {
@@ -91,6 +92,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     if (note) {
         return res.status(400).json({ message: 'User has assigned notes' });
     }
+    // FIND DATA
     const user = await User.findById(id).exec();
     if (!user) {
         return res.status(400).json({ message: 'User not found' });
