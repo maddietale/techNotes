@@ -46,10 +46,10 @@ const createNewNote = asyncHandler(async (req, res) => {
     const result = await newNote.save();
     // SEND DATA
     if (result) {
-        return res.status(201).json({ message: `Note ${result.title} created :)` });
+        res.status(201).json({ message: `Note ${result.title} created :)` });
     }
     else {
-        return res.status(400).json({ message: "Creation failed :(" });
+        res.status(400).json({ message: "Creation failed :(" });
     }
 });
 
