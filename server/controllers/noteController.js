@@ -1,6 +1,7 @@
 // IMPORTS
 import Note from "../models/Note.js";
 import User from "../models/User.js";
+import asyncHandler from "express-async-handler";
 
 // @desc Get all notes
 // @route GET /notes
@@ -31,6 +32,10 @@ const createNewNote = asyncHandler(async (req, res) => {
     if (!user || !title || !text) {
         return res.status(400).json({ message: "All fields are required" });
     }
+    const thisUser = await User.findById(user.toString());
+    if (!thisUser) {
+        return res.status(400).json({ message: "User does not exist" });
+    }
     // DUPLICATE DATA
     const duplicate = await Note.findOne({ title: title }).lean().exec();
     if (duplicate) {
@@ -59,12 +64,12 @@ const updateNote = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "All fields are required, except password" });
     }
     // FIND DATA
-    const note = Note.findById(id).exec();
+    const note = await Note.findById(id).exec();
     if (!note) {
         return res.status(404).send({ message: "Note does not exist" });
     }
     // DUPLICATE DATA
-    const duplicate = Note.findOne({ title: title }).lean().exec();
+    const duplicate = await Note.findOne({ title: title }).lean().exec();
     if (duplicate && duplicate?._id.toString() !== id) {
         return res.status(409).json({ message: "Duplicate title" });
     }
@@ -74,7 +79,7 @@ const updateNote = asyncHandler(async (req, res) => {
     note.text = text;
     note.completed = completed;
     // SEND DATA
-    const updatedNote = await note.save()
+    const updatedNote = await note.save();
     res.status(200).json({ message: `${updatedNote.title} updated` });
 });
 

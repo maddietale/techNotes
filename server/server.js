@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import rootRoutes from "./routes/root.js";
 import userRoutes from "./routes/userRoutes.js";
-import noteRoutes from "./routes/userRoutes.js";
+import noteRoutes from "./routes/noteRoutes.js";
 import logger, { logEvents } from "./middleware/logger.js";
 import errorHandler from "./middleware/errorHandler.js";
 import corsOptions from "./config/corsOptions.js";

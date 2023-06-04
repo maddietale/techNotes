@@ -6,7 +6,43 @@ POST http://localhost:3500/users
 Content-Type: application/json
 
 {
-    "username": "mahdieh",
+    "username": "maddie",
     "password": "123",
     "roles": ["Employee"]
+}
+
+###
+
+DELETE http://localhost:3500/users
+Content-Type: application/json
+
+{
+    "id": "647c5d1bac1113a711191493"
+}
+
+###
+
+PATCH  http://localhost:3500/users
+Content-Type: application/json
+
+{
+    "id": "647c66c8484c41ab8bcca6c6",
+    "username": "mahdieh",
+    "roles": ["Employee"],
+    "active": true
+}
+
+###
+
+GET http://localhost:3500/notes
+
+###
+
+POST http://localhost:3500/notes
+Content-Type: application/json
+
+{
+    "user": "647c66c8484c41ab8bcca6c6",
+    "title": "fuck",
+    "text": "fuck you"
 }

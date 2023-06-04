@@ -57,7 +57,7 @@ const updateUser = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "All fields are required, except password" });
     }
     // FIND DATA
-    const user = User.findById(id).exec();
+    const user = await User.findById(id).exec();
     if (!user) {
         return res.status(404).send({ message: "User does not exist" });
     }
@@ -74,7 +74,7 @@ const updateUser = asyncHandler(async (req, res) => {
         user.password = await bcrypt.hash(password, 10);
     }
     // SEND DATA
-    const updatedUser = await user.save()
+    const updatedUser = await user.save();
     res.status(200).json({ message: `${updatedUser.username} updated` });
 });
 
